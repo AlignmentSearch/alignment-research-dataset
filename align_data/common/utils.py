@@ -30,7 +30,7 @@ class EntryWriter:
         txt_file = os.path.join(path, name + '.txt')
 
         self.jsonl_writer = jsonlines.open(jsonl_file, mode='a') if not overwrite else jsonlines.open(jsonl_file, mode='w')
-        self.text_writer = open(txt_file, mode='a') if not overwrite else open(txt_file, 'w')
+        self.text_writer = open(txt_file, mode='a', encoding='utf-8') if not overwrite else open(txt_file, 'w', encoding='utf-8')
         self.entry_idx = 0
 
     def __enter__(self):
@@ -47,6 +47,7 @@ class EntryWriter:
         # Save the entry in plain text, mainly for debugging
         print("[ENTRY {}]".format(self.entry_idx), file=self.text_writer)
         text = '    '.join(('\n'+entry["text"].lstrip()).splitlines(True)) + '\n'
+        
         print(text, file=self.text_writer)
 
         self.entry_idx += 1
@@ -65,9 +66,9 @@ class HtmlCleaner:
             
     def clean(self, html, markdown=False):
         soup = bs4.BeautifulSoup(html, features="html.parser")
-        text = htmlformatter.handle(html) if markdown else  soup.get_text()
+        text = htmlformatter.handle(html) if markdown else soup.get_text()
         
-        for ii , rgx in enumerate(self.regexes):
+        for ii, rgx in enumerate(self.regexes):
             text = re.sub(rgx, self.target_list[ii], text, flags=re.DOTALL) if self.DOTALL else rgx.sub(self.target_list[ii], text)
 
         return text

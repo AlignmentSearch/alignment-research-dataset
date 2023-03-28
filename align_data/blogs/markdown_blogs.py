@@ -51,7 +51,7 @@ class MarkdownBlogs(AlignmentDataset):
             if self._entry_done(ii):
                 # logger.info(f"Already done {ii} , {filename}")
                 continue
-            with open(filename , "r") as f:
+            with open(filename , "r", encoding="utf-8") as f:
                 text = f.read()
 
             try:

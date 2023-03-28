@@ -49,3 +49,27 @@ class Stampy(AlignmentDataset):
             new_entry.add_id()
 
             yield new_entry
+            
+import time
+
+def test_run():
+    # Replace this with a valid URL containing the JSON data
+    test_url = "https://example.com/data.json"
+    
+    # Create an instance of the Stampy class
+    stampy_instance = Stampy(index_url=test_url)
+    
+    # Fetch and process the entries
+    entries = stampy_instance.fetch_entries()
+    
+    # Print the first 10 entries
+    count = 0
+    for entry in entries:
+        print(entry)
+        print("\n")
+        count += 1
+        if count >= 10:
+            break
+
+if __name__ == "__main__":
+    test_run()

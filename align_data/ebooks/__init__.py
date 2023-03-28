@@ -3,8 +3,7 @@ from .gdrive_ebooks import GDrive
 from .mdebooks import MDEBooks
 
 EBOOK_REGISTRY = [
-    AgentModels(name='agentmodels',
-                repo='https://github.com/agentmodels/agentmodels.org.git'),
+    AgentModels(name='agentmodels'),
     GDrive(name='gdrive_ebooks',
            gdrive_adress='https://drive.google.com/drive/folders/1VbVS9OzfI0Rc05NRXto3SWuqzYSNa4Hy'),
     MDEBooks(name="markdown.ebooks",
