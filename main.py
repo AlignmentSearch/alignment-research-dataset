@@ -96,9 +96,9 @@ if __name__ == "__main__":
 
     fetch = [ # tbu = to be updated
         # "agentmodels",  # Fails
-        # "alignment_newsletter",  # Success
+        "alignment_newsletter",  # Success
         # "arbital",  # Success
-        # "arxiv_papers",  # Success, tbu
+        #"arxiv_papers",  # Success, tbu
         # "audio_transcripts",  # Fails, try more
         # "distill",  # Success, tbu
         # "gdocs",  # Success
@@ -106,7 +106,7 @@ if __name__ == "__main__":
         # "gwern_blog",  # Success, manualy update dates. tbu
         # "nonarxiv_papers",  # Success, manually update dates/urls/tags. tbu
         # "reports",  # Success, missing most dates and urls
-        "stampy"  # Fails
+        #"stampy"  # Fails
         # "aiimpacts.org",  # Fails
         # "aipulse.org",  # Fails
         # "aisafety.camp",  # Fails
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     for name in fetch:
         main("fetch", "data", name)
         print(f"\nDone with {name}.\n\n")
-        print_jsonl(f"data/{name}.jsonl", num_lines=20, text_lim=100)
+        print_jsonl(f"data/{name}.jsonl", num_lines=20, text_lim=100)   
         
     
     # import os
