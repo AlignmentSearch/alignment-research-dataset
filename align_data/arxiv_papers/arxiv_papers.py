@@ -74,22 +74,16 @@ class ArxivPapers(AlignmentDataset):
                     "text": "n/a",
                 })
             else:
-                new_entry = DataEntry({"url": self._get_arxiv_link(ids),
-                                   "source": "arxiv",
-                                   "source_type": "html",
-                                   "converted_with": "markdownify",
-                                   "title": paper.title,
-                                   "authors": [str(x) for x in paper.authors],
-                                   "date_published": str(paper.published),
-                                   "data_last_modified": str(paper.updated),
-                                   "abstract": paper.summary.replace("\n", " "),
-                                   "author_comment": paper.comment,
-                                   "journal_ref": paper.journal_ref,
-                                   "doi": paper.doi,
-                                   "primary_category": paper.primary_category,
-                                   "categories": paper.categories,
-                                   "text": markdown,
-                                   })
+                abstract = paper.summary.replace("\n", " ")
+                new_entry = DataEntry({
+                    "source": "arxiv",
+                    "title": paper.title,
+                    "authors": [str(x) for x in paper.authors],
+                    "date_published": str(paper.published),
+                    "url": self._get_arxiv_link(ids),
+                    "tags": paper.categories,
+                    "text": markdown,
+                })
             new_entry.add_id()
             yield new_entry
             time.sleep(self.COOLDOWN)
