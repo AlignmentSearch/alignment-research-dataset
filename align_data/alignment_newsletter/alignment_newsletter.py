@@ -26,6 +26,9 @@ class AlignmentNewsletter(AlignmentDataset):
         For each row in the dataframe, create a new entry with the following fields: url, source,
         converted_with, source_type, venue, newsletter_category, highlight, newsletter_number,
         summarizer, opinion, prerequisites, read_more, title, authors, date_published, text
+
+        To update, download the spreadsheet of all the summaries of the newsletter at 
+        https://rohinshah.com/alignment-newsletter/ and place it in data/raw/alignment_newsletter.xlsx
         """
         self.setup()
         for ii , row in tqdm(self.df.iterrows()):
