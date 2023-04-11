@@ -59,16 +59,19 @@ class Gdocs(AlignmentDataset):
 
             metadata = self._get_metadata(docx_filename)
 
+            title = text.splitlines()[0]
+            if title == "Table of Contents":
+                title = "Interview Information"
+            date = title.split("on ")[-1]
+            
             new_entry = DataEntry({
                 "source": self.name,
-                "source_filetype": "docx",
-                "converted_with": "pandoc",
-                "title": metadata.title,
-                "authors": metadata.author,
-                "date_published": metadata.created if metadata.created else "n/a",
-                "text": text,
+                "title": title if title else "n/a",
+                "authors": "Vael Gates",
+                "date_published": date if date else "n/a",
                 "url": "n/a",
-                "docx_name": docx_filename,
+                "tags": "n/a",
+                "text": text,
             })
 
             new_entry.add_id()

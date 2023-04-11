@@ -42,33 +42,29 @@ class NonarxivPapers(AlignmentDataset):
                 continue
 
             logger.info(f"Processing {filename}")
-            xml_text = open(filename, "r").read()
+            xml_text = open(filename, "r", encoding="utf-8").read()
             try:
                 doc_dict = grobid_tei_xml.parse_document_xml(xml_text).to_dict()
 
                 logger.info(f"Doc: {list(doc_dict.keys())}")
                 new_entry = DataEntry({
                     "source": self.name,
-                    "source_filetype": "pdf",
-                    "abstract": doc_dict["abstract"],
-                    "authors": [xx["full_name"] for xx in doc_dict["header"]["authors"]],
                     "title": doc_dict["header"]["title"],
-                    "text": doc_dict["body"],
+                    "authors": [xx["full_name"] for xx in doc_dict["header"]["authors"]],
                     "date_published": "n/a",
                     "url": "n/a",
-                    "filename": filename,
+                    "tags": "n/a",
+                    "text": f"Abstract: {doc_dict['abstract']}\n\n{doc_dict['body']}",
                 })
             except Exception as e:
                 logger.error(f"Error: {e}")
                 new_entry = DataEntry({
                     "source": self.name,
-                    "source_filetype": "pdf",
-                    "authors": "n/a",
                     "title": "n/a",
-                    "text": "n/a",
+                    "authors": "n/a",
                     "date_published": "n/a",
                     "url": "n/a",
-                    "filename": filename,
+                    "text": "n/a",
                 })
             
             new_entry.add_id()

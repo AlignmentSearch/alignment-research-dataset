@@ -38,7 +38,7 @@ class GwernBlog(AlignmentDataset):
             new_entry = DataEntry({
                 "source": "gwern",
                 "url": post_href,
-                "title": text.splitlines()[1].split("title: ")[1],
+                "title": text.splitlines()[1].split("title: ")[1] if "title: " in text else "n/a",
                 "authors": "Gwern Branwen",
                 "date_published": "n/a",
                 "text": text,

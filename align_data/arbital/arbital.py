@@ -50,31 +50,27 @@ class Arbital(AlignmentDataset):
                     'date_published': 'Error getting page',
                 }
             new_entry = DataEntry({
-                'title': page['title'] if 'title' in page else 'n/a',
-                'text': page['text'] if 'text' in page else 'n/a',
-                'date_published': page['pageCreatedAt'] if 'pageCreatedAt' in page else 'n/a',
-                'url': 'n/a',
                 'source': self.name,
-                'source_filetype': 'text',
+                'title': page['title'] if 'title' in page else 'n/a',
                 'authors': 'n/a',
-                'alias': alias,
+                'date_published': page['pageCreatedAt'] if 'pageCreatedAt' in page else 'n/a',
+                'url': f'https://arbital.com/p/{page["alias"]}/' if 'alias' in page else 'n/a',
+                'text': page['text'] if 'text' in page else 'n/a',
             })
             new_entry.add_id()
             yield new_entry
 
     def get_arbital_page_aliases(self, subspace):
         headers = self.headers.copy()
-        headers['referer'] = 'https://arbital.com/explore/{subspace}/'.format(
-            subspace=subspace)
-        data = '{{"pageAlias":"{subspace}"}}'.format(subspace=subspace)
-        response = requests.post(
-            'https://arbital.com/json/explore/', headers=headers, data=data).json()
+        headers['referer'] = f'https://arbital.com/explore/{subspace}/'
+        data = f'{{"pageAlias":"{subspace}"}}'
+        response = requests.post('https://arbital.com/json/explore/', headers=headers, data=data).json()
         return list(response['pages'].keys())
 
     def get_page(self, alias):
         headers = self.headers.copy()
         headers['referer'] = 'https://arbital.com/'
-        data = '{{"pageAlias":"{alias}"}}'.format(alias=alias)
+        data = f'{{"pageAlias":"{alias}"}}'
         response = requests.post(
             'https://arbital.com/json/primaryPage/', headers=headers, data=data).json()
         return response['pages'][alias]

@@ -6,6 +6,7 @@ from typing import List , Union
 import align_data
 from align_data.common.utils import EntryWriter
 from align_data.analysis.count_tokens import count_token
+from print_jsonl import print_jsonl
 
 # import logging , sys
 
@@ -33,7 +34,7 @@ class AlignmentDataset:
         :return: The path to the file that was written to.
         """
         assert name in align_data.ALL_DATASETS , f"{name} is not a valid dataset name"
-        with EntryWriter(name, self.out_path) as writer:
+        with EntryWriter(name, self.out_path, True) as writer:
             for entry in align_data.get_dataset(name).fetch_entries():
                 writer.write(entry)
 
@@ -46,9 +47,12 @@ class AlignmentDataset:
         the datasets, and merges all the files
         :return: The path to the merged file.
         """
+        i = 0
         for name in align_data.ALL_DATASETS:
             print(name)
             self.cmd_fetch(name)
+            if i == 1:
+                break
         
         return None #merge_all_files(out_dir = self.out_path)
 
@@ -88,4 +92,77 @@ def main(command : str , out_path : str = "data" , dataset_name : str = None ) -
         return None
 
 if __name__ == "__main__":
-    fire.Fire(main)
+    # fire.Fire(main)
+
+    fetch = [ # tbu = to be updated
+        # "agentmodels",  # Fails
+        "alignment_newsletter",  # Success
+        # "arbital",  # Success
+        #"arxiv_papers",  # Success, tbu
+        # "audio_transcripts",  # Fails, try more
+        # "distill",  # Success, tbu
+        # "gdocs",  # Success
+        # "gdrive_ebooks",  # Semi success, must manually change Titles, Authors, URLs. tbu
+        # "gwern_blog",  # Success, manualy update dates. tbu
+        # "nonarxiv_papers",  # Success, manually update dates/urls/tags. tbu
+        # "reports",  # Success, missing most dates and urls
+        #"stampy"  # Fails
+        # "aiimpacts.org",  # Fails
+        # "aipulse.org",  # Fails
+        # "aisafety.camp",  # Fails
+        # "carado.moe",  # Fails
+        # "cold.takes",  # Fails
+        # "deepmind.blog",  # Fails
+        # # "eaforum",  # Fails
+        # "generative.ink",  # Fails
+        # "intelligence.org",  # Fails
+        # "jsteinhardt.wordpress.com",  # Fails
+        # # "lesswrong",  # Fails
+        # "markdown.ebooks",  # Fails
+        # "qualiacomputing.com",  # Fails
+        # "vkrakovna.wordpress.com",  # Fails
+        # "waitbutwhy",  # Fails
+        # "www.yudkowsky.net"  # Fails
+    ]
+    
+    print("\n"*5)
+    for name in fetch:
+        main("fetch", "data", name)
+        print(f"\nDone with {name}.\n\n")
+        print_jsonl(f"data/{name}.jsonl", num_lines=20, text_lim=100)   
+        
+    
+    # import os
+    # import json
+
+    # # Function to read JSON objects from a .jsonl file
+    # def read_jsonl(file_path):
+    #     with open(file_path, 'r', encoding='utf-8') as file:
+    #         for line in file:
+    #             yield json.loads(line.strip())
+
+    # # Function to write JSON objects to a .jsonl file
+    # def write_jsonl(file_path, data):
+    #     with open(file_path, 'w', encoding='utf-8') as file:
+    #         for item in data:
+    #             file.write(json.dumps(item, ensure_ascii=False) + '\n')
+
+    # def combine_jsonl_files(directory_path, output_file):
+    #     combined_data = []
+
+    #     # Iterate over all files in the directory
+    #     for file_name in os.listdir(directory_path):
+    #         file_path = os.path.join(directory_path, file_name)
+
+    #         # Check if the file has a .jsonl extension
+    #         if file_name.endswith('.jsonl') and os.path.isfile(file_path):
+    #             combined_data.extend(list(read_jsonl(file_path)))
+
+    #     # Write the combined data to the output file
+    #     write_jsonl(output_file, combined_data)
+
+    # # Usage example
+    # input_directory = 'path/to/your/input/directory'
+    # output_file = 'combined.jsonl'
+    # combine_jsonl_files(input_directory, output_file)
+        

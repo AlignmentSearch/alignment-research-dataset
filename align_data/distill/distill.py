@@ -29,7 +29,7 @@ class Distill(AlignmentDataset):
                 # logger.info(f"Already done {ii}")
                 continue
             logger.info(f"Fetching {self.name} entry {filename}")
-            with open(os.path.join(self.DISTILL_POSTS_DIR, filename), "r") as f:
+            with open(os.path.join(self.DISTILL_POSTS_DIR, filename), "r", encoding="utf-8") as f:
                 html = f.read()
             
             yield self.fetch_individual_entries(html)
@@ -91,18 +91,13 @@ class Distill(AlignmentDataset):
 
         # build the json
         new_entry = DataEntry({
-            "url": "n/a", 
             "source": "distill",
-            "source_type": "html",
-            "converted_with": "python",
-            "title": title,
-            "authors": authors,
-            "date_published": str(date_published),
-            "abstract": abstract,
-            "journal_ref": "distill-pub",
-            "doi": doi,
-            "text": body,
-            "bibliography_bib": references,
+            "title": title if title is not None else "n/a",
+            "authors": authors if authors is not None else "n/a",
+            "date_published": str(date_published) if date_published is not None else "n/a",
+            "url": doi if doi is not None else "n/a", 
+            "tags": [],
+            "text": body if body is not None else "n/a",
         })
         new_entry.add_id()
         return new_entry

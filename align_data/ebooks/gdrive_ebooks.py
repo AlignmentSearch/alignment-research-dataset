@@ -58,19 +58,29 @@ class GDrive(AlignmentDataset):
                 logger.error(e)
                 text = "n/a"
 
-            metadata = epub_meta.get_epub_metadata(epub_file)
+            try: 
+                metadata = epub_meta.get_epub_metadata(epub_file)
+            except KeyError as e:
+                logger.error(f"Error getting metadata for {epub_file}")
+                logger.error(e)
+                metadata = {
+                    "source": "ebook",
+                    "title": "n/a",
+                    "date_published": "n/a",
+                    "text": "n/a",
+                    "url": "n/a",
+                    "file_name": epub_file
+                }
 
             new_entry = DataEntry({
                 "source": "ebook",
-                "source_filetype": "epub",
-                "converted_with": "pandoc",
-                "title": metadata["title"],
-                "date_published": metadata["publication_date"] if metadata["publication_date"] else "n/a",
-                "chapter_names": [chap["title"] for chap in metadata["toc"]],
-                "text": text,
+                "title": metadata["title"] if "title" in metadata else "n/a",
+                "date_published": metadata["publication_date"] if "publication_date" in metadata and metadata["publication_date"] else "n/a",
+                "chapter_names": [chap["title"] for chap in metadata["toc"]] if "toc" in metadata else "n/a",
                 "url": "n/a",
-                "file_name": epub_file
+                "text": text,
             })
-
+            
+            
             new_entry.add_id()
             yield new_entry

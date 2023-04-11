@@ -49,11 +49,10 @@ class AudioTranscripts(AlignmentDataset):
 
             new_entry = DataEntry({
                 "source": "audio-transcripts",
-                "source_filetype": "audio",
-                "url": "n/a",
-                "converted_with": "otter-ai",
                 "title": title,
                 "authors": "unknown",
+                "url": "n/a",
+                "converted_with": "otter-ai",
                 "date_published": str(date),
                 "text": text,
             })
